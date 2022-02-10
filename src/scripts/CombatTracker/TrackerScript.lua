@@ -371,7 +371,7 @@ function ct.eventHandler(event, ...)
             killAnonymousEventHandler(id)
         end
 
-    --the server has been coded to send IAC AYT on connect and reconnect, use this to kick into update check
+    --the server has been coded to send IAC AYT on connect and reconnect, use this to kick into config()
     elseif event == "sysTelnetEvent" then
         if tonumber(arg[1]) == 246 then --246 is AYT
             ct.downloading = false
