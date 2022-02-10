@@ -1,0 +1,7 @@
+{
+  "package": "CombatTracker",
+  "version": "1.0",
+  "author": "Noax and Quid",
+  "title": "Xaos Combat Tracker",
+  "outputFile": true
+}

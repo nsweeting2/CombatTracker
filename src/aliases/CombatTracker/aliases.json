@@ -1,0 +1,14 @@
+[
+    {
+        "name": "TrackerUpdate",
+        "regex": "^tracker update$"
+    },
+    {
+        "name": "TrackerShow",
+        "regex": "^tracker show$"
+    },
+    {
+        "name": "TrackerHide",
+        "regex": "^tracker hide$"
+    }
+]

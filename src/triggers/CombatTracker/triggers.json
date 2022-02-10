@@ -1,0 +1,11 @@
+[
+    {
+      "name": "onNewLine",
+      "patterns": [
+        {
+          "pattern": "^(.*)$",
+          "type": "regex"
+        }
+      ]
+    }
+  ]
