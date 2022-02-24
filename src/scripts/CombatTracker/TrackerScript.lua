@@ -78,6 +78,70 @@ function ct.echo(text)
 
 end
 
+
+--This function fires on the msdp.ROUNDS event by handle_ROUND
+--msdp.ROUNDS increments every combat round, its value is truely unimportant
+--Values from the server range from 0 to 2147483647 (c integer)
+--The important point is that if msdp.ROUNDS changed, it is a new round
+local function on_ROUNDS()
+
+    --Add a table to tracker so we can copy in ct.ar
+    ct.tracker[#ct.tracker + 1] = { }
+
+    --add all our keys to the table, with values of 0
+    for k, v in pairs(ct.name) do
+        ct.ar[#ct.tracker] = 0
+    end
+
+    --copy ct.cr into ct.tracker at the new table
+    for k, v in pairs(ct.ar) do
+        ct.tracker[#ct.tracker][k] = v
+    end
+
+    --Set everything in ct.ar to 0
+    for k, v in pairs(ct.name) do
+        ct.ar[v] = 0
+    end
+
+    --remove 1st table from tracker so that our 51st becomes 50th
+    while #ct.tracker > ct.rounds do
+        table.remove(ct.tracker, 1)
+    end
+
+    --show everything in our miniconsole
+    ct.trackerConsole:clear()
+    ct.trackerConsole:echo("               |")
+    for i = 1, #ct.tracker do
+        if tonumber(i) < 10 then
+            ct.trackerConsole:echo("  " .. tostring(i) .. "|")
+        else
+            ct.trackerConsole:echo(" " ..tostring(i) .. "|")
+        end
+    end
+    ct.trackerConsole:echo("\n")
+    for key, name in pairs(ct.name) do
+        local len = 15 - string.len(name)
+        while len > 0 do
+          ct.trackerConsole:echo(" ")
+          len = len - 1
+        end
+        ct.trackerConsole:echo(tostring(name))
+        ct.trackerConsole:echo("|")
+        for k, v in pairs(ct.tracker) do
+            local len = 3 - string.len(tostring(ct.tracker[k][name]))
+            while len > 0 do
+                ct.trackerConsole:echo(" ")
+                len = len -1
+            end
+            ct.trackerConsole:echo(tostring(ct.tracker[k][name]))
+            ct.trackerConsole:echo("|")
+        end
+        ct.trackerConsole:echo("\n")
+    end
+    ct.trackerConsole:echo("Updated: " .. getTime(true, "hh:mm:ssap") .. "\n")
+
+end
+
 --will make us a miniconsole in an adjustable container
 --by deafult our info is displayed here, Quid will make a graphical visulization
 local function buildTrackerMiniConsole()
@@ -264,69 +328,6 @@ function ct.lineHandler(line)
         break
       end
     end
-
-end
-
---This function fires on the msdp.ROUNDS event by handle_ROUND
---msdp.ROUNDS increments every combat round, its value is truely unimportant
---Values from the server range from 0 to 2147483647 (c integer)
---The important point is that if msdp.ROUNDS changed, it is a new round
-local function on_ROUNDS()
-
-    --Add a table to tracker so we can copy in ct.ar
-    ct.tracker[#ct.tracker + 1] = { }
-
-    --add all our keys to the table, with values of 0
-    for k, v in pairs(ct.name) do
-        ct.ar[#ct.tracker] = 0
-    end
-
-    --copy ct.cr into ct.tracker at the new table
-    for k, v in pairs(ct.ar) do
-        ct.tracker[#ct.tracker][k] = v
-    end
-
-    --Set everything in ct.ar to 0
-    for k, v in pairs(ct.name) do
-        ct.ar[v] = 0
-    end
-
-    --remove 1st table from tracker so that our 51st becomes 50th
-    while #ct.tracker > ct.rounds do
-        table.remove(ct.tracker, 1)
-    end
-
-    --show everything in our miniconsole
-    ct.trackerConsole:clear()
-    ct.trackerConsole:echo("               |")
-    for i = 1, #ct.tracker do
-        if tonumber(i) < 10 then
-            ct.trackerConsole:echo("  " .. tostring(i) .. "|")
-        else
-            ct.trackerConsole:echo(" " ..tostring(i) .. "|")
-        end
-    end
-    ct.trackerConsole:echo("\n")
-    for key, name in pairs(ct.name) do
-        local len = 15 - string.len(name)
-        while len > 0 do
-          ct.trackerConsole:echo(" ")
-          len = len - 1
-        end
-        ct.trackerConsole:echo(tostring(name))
-        ct.trackerConsole:echo("|")
-        for k, v in pairs(ct.tracker) do
-            local len = 3 - string.len(tostring(ct.tracker[k][name]))
-            while len > 0 do
-                ct.trackerConsole:echo(" ")
-                len = len -1
-            end
-            ct.trackerConsole:echo(tostring(ct.tracker[k][name]))
-            ct.trackerConsole:echo("|")
-        end
-        ct.trackerConsole:echo("\n")
-    end
-    ct.trackerConsole:echo("Updated: " .. getTime(true, "hh:mm:ssap") .. "\n")
 
 end
 
